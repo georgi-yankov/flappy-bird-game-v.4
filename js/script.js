@@ -13,10 +13,14 @@ import { Character } from "./Character.js";
 	const characterHeight = parseInt(window.getComputedStyle(charElem).getPropertyValue("height"));
 	const characterLeft = parseInt(window.getComputedStyle(charElem).getPropertyValue("left"));
 	const characterTop = parseInt(window.getComputedStyle(charElem).getPropertyValue("top"));
+	const scoresValue = document.getElementById("scores-value");
+	const levelValue = document.getElementById("level-value");
+	let scores = 0;
+	let level = 0;
 	let holeHeight = 200;
 	let ID = 0;
 
-	newBlock(); // make the first block, then every 3s a new one
+	newBlock(); // make the first block, then "setInterval"
 	let blockInterval = setInterval(newBlock, 1400);
 
 	setInterval(() => {
@@ -39,7 +43,18 @@ import { Character } from "./Character.js";
 		let blockWidth = parseInt(window.getComputedStyle(blockElem).getPropertyValue("width"));
 
 		block.move();
-		ID++;
+		ID++;	
+	}
+
+	function updateScores() {
+	    scores++;
+	    scoresValue.innerHTML = scores;
+
+	    if(scores > 0 && !(scores % 5)) {
+	        level++;
+	        levelValue.innerHTML = level;
+	        holeHeight -= 15;
+	    }
 	}
 
 	function gameOver() {
@@ -67,18 +82,32 @@ import { Character } from "./Character.js";
 		    ) {
 		    return true;
 		}
+
+		// Update scores
+		if(characterLeft === holeLeft + holeWidth) {
+			updateScores();
+		}
 	}
 
 	function gameReset() {
 		alert("Game Over");
-		
+
 		ID = 0;
 		holeHeight = 200;
 		character.isJumping = false;
 		charElem.style.top = characterTop + "px";
+		scores = 0;
+		level = 0;
+		scoresValue.innerHTML = scores;
+		levelValue.innerHTML = level;
 
+		clearInterval(blockInterval);
+		
 		game.querySelectorAll('.block').forEach(e => e.remove());
 		game.querySelectorAll('.hole').forEach(e => e.remove());
+
+		newBlock(); // make the first block, then "setInterval"
+		blockInterval = setInterval(newBlock, 1400);
 	}
 
 })();
