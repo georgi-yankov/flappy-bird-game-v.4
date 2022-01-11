@@ -1,15 +1,30 @@
-import { Block } from "./Block.js"; 
+import { Block } from "./Block.js";
+import { Character } from "./Character.js";
 
 (function() {
 
 	const game = document.getElementById("game");
-	const character = document.getElementById("character");
 	let holeHeight = 200;
 	let ID = 0;
 
-	newBlock(); // make first block, then every 3s a new one
+	let character = new Character();
+	game.appendChild(character.draw());
+	const charElem = document.getElementById("character");
 
-	let blockInterval = setInterval(newBlock, 3000);
+	newBlock(); // make the first block, then every 3s a new one
+	let blockInterval = setInterval(newBlock, 1400);
+
+	setInterval(() => {
+	    gameOver() ? gameReset() : character.gravity();
+	}, 10);
+
+	document.addEventListener('keydown', character.jump.bind(character));
+
+	/**
+	 * 
+	 * FUNCTIONS
+	 * 
+	 */
 
 	function newBlock() {
 		const hole_yPos = Math.floor(Math.random() * (game.scrollHeight - holeHeight + 1));
@@ -21,26 +36,17 @@ import { Block } from "./Block.js";
 		let blockWidth = parseInt(window.getComputedStyle(blockElem).getPropertyValue("width"));
 
 		block.move();
-
-		let blockInterval = setInterval(() => {
-			if(blockLeft < -blockWidth) {
-				clearInterval(blockInterval);
-			} else if(gameOver(block.id)) {
-				// TO DO
-				reset();
-			}
-		}, 10);
-
 		ID++;
 	}
 
-	function gameOver(ID) {
+	function gameOver() {
 		// TO DO
 		return false;
 	}
 
-	function reset() {
+	function gameReset(gameInterval) {
 		// TO DO
+		// to clear the blockInterval and all other intervals
 	}
 
 })();
