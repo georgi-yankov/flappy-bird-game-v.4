@@ -1,7 +1,8 @@
 class Block {
-  constructor(id, hole_yPos) {
+  constructor(id, hole_yPos, holeHeight) {
     this.id = id;
     this.hole_yPos = hole_yPos;
+    this.holeHeight = holeHeight;
   }
 
   draw() {
@@ -15,6 +16,7 @@ class Block {
     hole.classList.add('hole');
 
     hole.style.top = this.hole_yPos + 'px';
+    hole.style.height = this.holeHeight + 'px';
 
     const documentFragment = document.createDocumentFragment();
     documentFragment.appendChild(block);

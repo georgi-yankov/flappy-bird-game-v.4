@@ -12,6 +12,7 @@ import { Character } from "./Character.js";
 	const characterWidth = parseInt(window.getComputedStyle(charElem).getPropertyValue("width"));
 	const characterHeight = parseInt(window.getComputedStyle(charElem).getPropertyValue("height"));
 	const characterLeft = parseInt(window.getComputedStyle(charElem).getPropertyValue("left"));
+	const characterTop = parseInt(window.getComputedStyle(charElem).getPropertyValue("top"));
 	let holeHeight = 200;
 	let ID = 0;
 
@@ -30,7 +31,7 @@ import { Character } from "./Character.js";
 
 	function newBlock() {
 		const hole_yPos = Math.floor(Math.random() * (game.scrollHeight - holeHeight + 1));
-		const block = new Block(ID, hole_yPos);		
+		const block = new Block(ID, hole_yPos, holeHeight);		
 		game.appendChild(block.draw());
 
 		let blockElem = document.getElementById('block-' + block.id);
@@ -68,10 +69,16 @@ import { Character } from "./Character.js";
 		}
 	}
 
-	function gameReset(gameInterval) {
+	function gameReset() {
 		alert("Game Over");
-		// TO DO
-		// to clear the blockInterval and all other intervals
+		
+		ID = 0;
+		holeHeight = 200;
+		character.isJumping = false;
+		charElem.style.top = characterTop + "px";
+
+		game.querySelectorAll('.block').forEach(e => e.remove());
+		game.querySelectorAll('.hole').forEach(e => e.remove());
 	}
 
 })();
