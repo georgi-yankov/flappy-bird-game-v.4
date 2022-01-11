@@ -3,13 +3,17 @@ import { Character } from "./Character.js";
 
 (function() {
 
+	let character = new Character();
 	const game = document.getElementById("game");
+	game.appendChild(character.draw());
+
+	const gameHeight = parseInt(window.getComputedStyle(game).getPropertyValue("height"));
+	const charElem = document.getElementById("character");
+	const characterWidth = parseInt(window.getComputedStyle(charElem).getPropertyValue("width"));
+	const characterHeight = parseInt(window.getComputedStyle(charElem).getPropertyValue("height"));
+	const characterLeft = parseInt(window.getComputedStyle(charElem).getPropertyValue("left"));
 	let holeHeight = 200;
 	let ID = 0;
-
-	let character = new Character();
-	game.appendChild(character.draw());
-	const charElem = document.getElementById("character");
 
 	newBlock(); // make the first block, then every 3s a new one
 	let blockInterval = setInterval(newBlock, 1400);
@@ -21,9 +25,7 @@ import { Character } from "./Character.js";
 	document.addEventListener('keydown', character.jump.bind(character));
 
 	/**
-	 * 
-	 * FUNCTIONS
-	 * 
+	 * Functions
 	 */
 
 	function newBlock() {
@@ -40,11 +42,34 @@ import { Character } from "./Character.js";
 	}
 
 	function gameOver() {
-		// TO DO
-		return false;
+		const characterTop = parseInt(window.getComputedStyle(charElem).getPropertyValue("top"));		
+		const hole = game.querySelector('.hole'); // get only the first hole
+		const holeTop = parseInt(window.getComputedStyle(hole).getPropertyValue("top"));
+		const holeLeft = parseInt(window.getComputedStyle(hole).getPropertyValue("left"));
+		const holeWidth = parseInt(window.getComputedStyle(hole).getPropertyValue("width"));
+		const holeHeight = parseInt(window.getComputedStyle(hole).getPropertyValue("height"));
+
+		// Check for top strike
+		if(characterTop <= 0 - character.jumpingStep) {
+		   return true;
+		}
+
+		// Check for bottom strike
+		if(characterTop >= (gameHeight - characterHeight)) {
+		   return true;
+		}
+
+		// Check for block strike
+		if (
+		    (holeLeft <= characterLeft + characterWidth && holeLeft + holeWidth >= characterLeft) &&
+		    (characterTop + character.gravityStep < holeTop || characterTop - character.gravityStep + characterHeight > holeTop + holeHeight)
+		    ) {
+		    return true;
+		}
 	}
 
 	function gameReset(gameInterval) {
+		alert("Game Over");
 		// TO DO
 		// to clear the blockInterval and all other intervals
 	}
