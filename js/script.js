@@ -15,6 +15,8 @@ import { Character } from "./Character.js";
 	const characterTop = parseInt(window.getComputedStyle(charElem).getPropertyValue("top"));
 	const scoresValue = document.getElementById("scores-value");
 	const levelValue = document.getElementById("level-value");
+	const gameOverAudio = new Audio('../audio/game-over.mp3');
+    const levelAudio = new Audio('../audio/level.mp3');
 	let scores = 0;
 	let level = 0;
 	let holeHeight = 200;
@@ -53,6 +55,7 @@ import { Character } from "./Character.js";
 	    if(scores > 0 && !(scores % 5)) {
 	        level++;
 	        levelValue.innerHTML = level;
+	        levelAudio.play();
 	        holeHeight -= 15;
 	    }
 	}
@@ -84,13 +87,16 @@ import { Character } from "./Character.js";
 		}
 
 		// Update scores
-		if(characterLeft === holeLeft + holeWidth) {
+		if(characterLeft === holeLeft) {
 			updateScores();
 		}
 	}
 
 	function gameReset() {
+		gameOverAudio.play();
 		alert("Game Over");
+		gameOverAudio.pause();
+		gameOverAudio.currentTime = 0.0;
 
 		ID = 0;
 		holeHeight = 200;
@@ -102,7 +108,7 @@ import { Character } from "./Character.js";
 		levelValue.innerHTML = level;
 
 		clearInterval(blockInterval);
-		
+
 		game.querySelectorAll('.block').forEach(e => e.remove());
 		game.querySelectorAll('.hole').forEach(e => e.remove());
 
