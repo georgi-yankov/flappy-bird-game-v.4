@@ -39,7 +39,7 @@ class Block {
         block.remove();
         hole.remove();
       }
-    }, 20);
+    }, 10);
   }
 }
 
