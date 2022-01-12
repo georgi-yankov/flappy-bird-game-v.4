@@ -7,9 +7,7 @@
 #game {
     width: 400px;
     height: 500px;
-
     position: relative;
-
     border: 1px solid black;
     overflow: hidden;
     margin: 20px auto 0;
@@ -17,7 +15,6 @@
 
 #game-status {
     width: 400px;
-
     display: flex;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 0.9rem;
@@ -25,15 +22,13 @@
     margin: 6px auto 0;
 }
 
-#character{
+#character {
     width: 20px;
     height: 20px;
-
     position: absolute;
     top: 240px;
     left: 20px;
     z-index: 1;
-
     background-color: blue;
     border-radius: 50%;
 }
@@ -41,19 +36,87 @@
 .block {
     width: 30px;
     height: 500px;
-
     position: absolute;
     top: 0;
     left: 400px;
-
     background-color: black;
 }
 
-.hole{
+.hole {
     width: 30px;
-
     position: absolute;
     left: 400px;
-
     background-color: white;
+}
+
+/* Popup */
+.popup {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.popup-content {
+    position: relative;
+    background-color: #9f0707;
+    border-radius: 6px;
+    color: white;
+    font-size: 3rem;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border: 1px solid #888;
+    width: 360px;
+    height: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 1s;
+    top: 25%;
+}
+
+@keyframes animatetop {
+    from {
+        top: -200px;
+    }
+
+    to {
+        top: 25%;
+    }
+
+}
+
+.popup-content button {
+    margin-top: 22px;
+    box-shadow: inset 0px 1px 0px 0px #ffffff;
+    background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+    background-color: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    display: inline-block;
+    cursor: pointer;
+    color: #666666;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px 24px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #ffffff;
+}
+
+.popup-content button:hover {
+    background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+    background-color: #f6f6f6;
+}
+
+.popup-content button:active {
+    position: relative;
+    top: 1px;
 }

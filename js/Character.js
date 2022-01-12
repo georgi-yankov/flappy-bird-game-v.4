@@ -23,10 +23,6 @@ class Character {
   }
 
   jump(e) {
-    if(this.freeze) {
-        return;
-    }
-
     const keyCode = e.keyCode;
     // If "Space" or "ArrowUp" key pressed
     if (keyCode === 32 || keyCode === 38) {
@@ -35,21 +31,27 @@ class Character {
         let jumpCount = 0;
 
         let jumpInterval = setInterval(() => {
-            let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
-
-            if (jumpCount < 15) {
-                character.style.top = characterTop - this.jumpingStep + "px";
-            }
-
-            // if jumpCount >= 15 && jumpCount <= 20
-            // pause for the character, it stays at the top for a while
-
-            if (jumpCount > 20) {
+            if(this.freeze) {
                 clearInterval(jumpInterval);
                 this.isJumping = false;
-                jumpCount = 0;
+                // jumpCount = 0;
+            } else {
+                let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
+
+                if (jumpCount < 15) {
+                    character.style.top = characterTop - this.jumpingStep + "px";
+                }
+
+                // if jumpCount >= 15 && jumpCount <= 20
+                // pause for the character, it stays at the top for a while
+
+                if (jumpCount > 20) {
+                    clearInterval(jumpInterval);
+                    this.isJumping = false;
+                    // jumpCount = 0;
+                }
+                jumpCount++;
             }
-            jumpCount++;
         }, 10);
     }
   }

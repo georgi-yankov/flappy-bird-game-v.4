@@ -3,6 +3,11 @@ import { Character } from "./Character.js";
 
 (function() {
 
+	// TO DO:
+	// Приблем с аудиото, ако няма user interaction - how to simulate user interaction
+	// След popup при Enter или Space пак да започва нова игра
+	// В мозилата да го проверя, много бързо се създаваха блоковете
+
 	let character = new Character();
 	const game = document.getElementById("game");
 	game.appendChild(character.draw());
@@ -15,8 +20,10 @@ import { Character } from "./Character.js";
 	const characterTop = parseInt(window.getComputedStyle(charElem).getPropertyValue("top"));
 	const scoresValue = document.getElementById("scores-value");
 	const levelValue = document.getElementById("level-value");
-	const gameOverAudio = new Audio('../audio/game-over.mp3');
-    const levelAudio = new Audio('../audio/level.mp3');
+    const popup = document.querySelector('.popup');
+    const playBtn = document.getElementById('play-btn');
+	let gameOverAudio = new Audio('../audio/game-over.mp3');
+    let levelAudio = new Audio('../audio/level.mp3');
 	let scores = 0;
 	let level = 0;
 	let holeHeight = 200;
@@ -31,6 +38,7 @@ import { Character } from "./Character.js";
 	}, 10);
 
 	document.addEventListener('keydown', character.jump.bind(character));
+	playBtn.addEventListener("click", newGame);
 
 	/**
 	 * Functions
@@ -76,19 +84,19 @@ import { Character } from "./Character.js";
 		const holeHeight = parseInt(window.getComputedStyle(hole).getPropertyValue("height"));
 
 		// Check for top strike
-		if(characterTop <= 0 - character.jumpingStep) {
+		if(characterTop <= 0) {
 		   return true;
 		}
 
 		// Check for bottom strike
-		if(characterTop >= (gameHeight - characterHeight)) {
+		if(characterTop >= (gameHeight - characterHeight - character.gravityStep)) {
 		   return true;
 		}
 
 		// Check for block strike
 		if (
 		    (holeLeft <= characterLeft + characterWidth && holeLeft + holeWidth >= characterLeft) &&
-		    (characterTop + character.gravityStep < holeTop || characterTop - character.gravityStep + characterHeight > holeTop + holeHeight)
+		    (characterTop - character.gravityStep < holeTop || characterTop + characterHeight >= holeTop + holeHeight)
 		    ) {
 		    return true;
 		}
@@ -100,16 +108,17 @@ import { Character } from "./Character.js";
 	}
 
 	function gameStop() {
-		console.log("gameStop");
+		character.freeze = true;
+		blocks.forEach(block => block.freeze = true );
+		gameOverAudio.play();
+
 		clearInterval(mainInterval);
 		clearInterval(blockInterval);
-		character.freeze = true;
-		blocks.forEach(block => { block.freeze = true; });
+
+		popup.style.display = 'block';
 	}
 
-	function gameReset() {
-		gameOverAudio.play();
-		alert("Game Over");
+	function newGame() {
 		gameOverAudio.pause();
 		gameOverAudio.currentTime = 0.0;
 
@@ -122,13 +131,20 @@ import { Character } from "./Character.js";
 		scoresValue.innerHTML = scores;
 		levelValue.innerHTML = level;
 
-		clearInterval(blockInterval);
-
 		game.querySelectorAll('.block').forEach(e => e.remove());
 		game.querySelectorAll('.hole').forEach(e => e.remove());
 
+		blocks = [];
+		character.freeze = false;
+
 		newBlock(); // make the first block, then "setInterval"
 		blockInterval = setInterval(newBlock, 1400);
+
+		mainInterval = setInterval(() => {
+			gameOver() ? gameStop() : character.gravity();
+		}, 10);
+
+		popup.style.display = 'none';		
 	}
 
 })();
