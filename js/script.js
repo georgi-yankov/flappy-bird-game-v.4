@@ -116,9 +116,20 @@ import { Character } from "./Character.js";
 		clearInterval(blockInterval);
 
 		popup.style.display = 'block';
+
+		document.addEventListener('keydown', onSpaceDownNewGame);
+	}
+
+	function onSpaceDownNewGame(e) {
+		// if "Space" key pressed
+		if(e.keyCode === 32) {
+			document.removeEventListener('keydown', onSpaceDownNewGame);
+			newGame();
+		}
 	}
 
 	function newGame() {
+		document.removeEventListener('keydown', onSpaceDownNewGame);
 		gameOverAudio.pause();
 		gameOverAudio.currentTime = 0.0;
 
