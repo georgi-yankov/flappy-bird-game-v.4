@@ -5,7 +5,6 @@ import { Character } from "./Character.js";
 
 	// TO DO:
 	// Приблем с аудиото, ако няма user interaction - how to simulate user interaction
-	// След popup при Enter или Space пак да започва нова игра
 	// В мозилата да го проверя, много бързо се създаваха блоковете
 
 	let character = new Character();
