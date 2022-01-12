@@ -3,6 +3,7 @@ class Character {
     this.gravityStep = 2;
     this.jumpingStep = 4;
     this.isJumping = false;
+    this.freeze = false;
   }
 
   draw() {
@@ -22,6 +23,10 @@ class Character {
   }
 
   jump(e) {
+    if(this.freeze) {
+        return;
+    }
+
     const keyCode = e.keyCode;
     // If "Space" or "ArrowUp" key pressed
     if (keyCode === 32 || keyCode === 38) {

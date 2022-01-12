@@ -3,6 +3,7 @@ class Block {
     this.id = id;
     this.hole_yPos = hole_yPos;
     this.holeHeight = holeHeight;
+    this.freeze = false;
   }
 
   draw() {
@@ -32,6 +33,10 @@ class Block {
     let blockWidth = parseInt(window.getComputedStyle(block).getPropertyValue("width"));
 
     let blockInterval = setInterval(() => {
+      if(this.freeze) {
+        return;
+      }
+
       if(blockLeft > -blockWidth) {
         blockLeft -= 2;
         block.style.left = blockLeft + 'px';    

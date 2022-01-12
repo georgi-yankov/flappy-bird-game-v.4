@@ -21,12 +21,13 @@ import { Character } from "./Character.js";
 	let level = 0;
 	let holeHeight = 200;
 	let ID = 0;
+	let blocks = [];
 
 	newBlock(); // make the first block, then "setInterval"
 	let blockInterval = setInterval(newBlock, 1400);
 
-	setInterval(() => {
-	    gameOver() ? gameReset() : character.gravity();
+	let mainInterval = setInterval(() => {
+	    gameOver() ? gameStop() : character.gravity();
 	}, 10);
 
 	document.addEventListener('keydown', character.jump.bind(character));
@@ -37,7 +38,13 @@ import { Character } from "./Character.js";
 
 	function newBlock() {
 		const hole_yPos = Math.floor(Math.random() * (game.scrollHeight - holeHeight + 1));
-		const block = new Block(ID, hole_yPos, holeHeight);		
+		const block = new Block(ID, hole_yPos, holeHeight);
+		blocks.push(block);
+
+		if(blocks.length > 6) {
+			blocks.shift();
+		}
+
 		game.appendChild(block.draw());
 
 		let blockElem = document.getElementById('block-' + block.id);
@@ -90,6 +97,14 @@ import { Character } from "./Character.js";
 		if(characterLeft === holeLeft) {
 			updateScores();
 		}
+	}
+
+	function gameStop() {
+		console.log("gameStop");
+		clearInterval(mainInterval);
+		clearInterval(blockInterval);
+		character.freeze = true;
+		blocks.forEach(block => { block.freeze = true; });
 	}
 
 	function gameReset() {
