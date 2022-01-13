@@ -3,10 +3,6 @@ import { Character } from "./Character.js";
 
 (function() {
 
-	// TO DO:
-	// Приблем с аудиото, ако няма user interaction - how to simulate user interaction
-	// В мозилата да го проверя, много бързо се създаваха блоковете
-
 	let character = new Character();
 	const game = document.getElementById("game");
 	game.appendChild(character.draw());
@@ -53,11 +49,6 @@ import { Character } from "./Character.js";
 		}
 
 		game.appendChild(block.draw());
-
-		let blockElem = document.getElementById('block-' + block.id);
-		let blockLeft = parseInt(window.getComputedStyle(blockElem).getPropertyValue("left"));
-		let blockWidth = parseInt(window.getComputedStyle(blockElem).getPropertyValue("width"));
-
 		block.move();
 		ID++;	
 	}
